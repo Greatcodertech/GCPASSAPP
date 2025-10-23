@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign In — Modern Login</title>
+  <style>
+    :root{
+      --bg-1: #0f172a; /* deep navy */
+      --bg-2: #071032; /* darker */
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.04);
+      --accent: #7c5cff;
+      --accent-2: #3dd6c6;
+      --muted: rgba(255,255,255,0.7);
+      --input-bg: rgba(255,255,255,0.03);
+      --danger: #ff6b6b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    /* Page layout */
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,0.10), transparent 10%),
+                  radial-gradient(900px 400px at 95% 90%, rgba(61,214,198,0.06), transparent 10%),
+                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color: white;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:32px;
+    }
+
+    /* Card */
+    .card{
+      width:100%;
+      max-width:420px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:14px;
+      padding:28px 28px 20px 28px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      backdrop-filter: blur(6px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:10px;
+      background: linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:grid;place-items:center;font-weight:700;color:#042;
+      box-shadow: 0 6px 18px rgba(124,92,255,0.12);
+    }
+    h1{font-size:20px;margin:0}
+    p.lead{margin:4px 0 18px 0;color:var(--muted);font-size:13px}
+
+    form{display:grid;gap:12px}
+
+    .field{
+      display:flex;flex-direction:column;gap:8px;
+    }
+    label{font-size:13px;color:var(--muted)}
+
+    input[type="email"], input[type="password"]{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      background:var(--input-bg);
+      color: white;
+      outline: none;
+      font-size:14px;
+      transition: box-shadow .15s, border-color .15s, transform .06s;
+    }
+    input::placeholder{color: rgba(255,255,255,0.35)}
+    input:focus{
+      box-shadow: 0 6px 18px rgba(124,92,255,0.10);
+      border-color: rgba(124,92,255,0.6);
+      transform: translateY(-1px);
+    }
+
+    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+
+    .checkbox{display:flex;gap:8px;align-items:center}
+    .checkbox input{accent-color:var(--accent)}
+    .forgot{font-size:13px;color:var(--muted);text-decoration:none}
+
+    .btn{
+      display:inline-grid;place-items:center;padding:12px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600;
+      background: linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:#042;box-shadow: 0 8px 24px rgba(124,92,255,0.12);
+    }
+
+    .btn.secondary{
+      background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600;
+    }
+
+    .divider{display:flex;align-items:center;gap:12px;margin:6px 0 10px 0}
+    .divider span{flex:1;height:1px;background:rgba(255,255,255,0.04)}
+    .divider small{font-size:12px;color:var(--muted)}
+
+    .socials{display:flex;gap:8px}
+    .socials button{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted);cursor:pointer}
+
+    .note{margin-top:10px;font-size:13px;color:var(--muted);text-align:center}
+
+    /* small screens tweaks */
+    @media (max-width:420px){
+      .card{padding:20px}
+      body{padding:18px}
+    }
+
+    /* validation styles */
+    .error{border-color:var(--danger) !important}
+    .error-message{color:var(--danger);font-size:13px;margin-top:4px}
+
+    /* little helper for password row */
+    .pass-row{position:relative}
+    .toggle-pass{
+      position:absolute;right:10px;top:50%;transform:translateY(-50%);background:transparent;border:0;padding:6px;cursor:pointer;color:var(--muted);
+      font-size:13px;border-radius:8px
+    }
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="brand">
+      <div class="logo" aria-hidden>GC</div>
+      <div>
+        <h1>Sign in to your account</h1>
+        <p class="lead">Welcome back — enter your credentials to continue.</p>
+      </div>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@company.com" required aria-required="true" autocomplete="email" />
+        <div id="emailErr" class="error-message" aria-live="polite" style="display:none"></div>
+      </div>
+
+      <div class="field pass-row">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Your password" minlength="6" required aria-required="true" autocomplete="current-password" />
+        <button type="button" class="toggle-pass" id="togglePass" aria-pressed="false">Show</button>
+        <div id="passErr" class="error-message" aria-live="polite" style="display:none"></div>
+      </div>
+
+      <div class="row">
+        <label class="checkbox"><input type="checkbox" id="remember" name="remember" /> <span>Remember me</span></label>
+        <a class="forgot" href="#">Forgot?</a>
+      </div>
+
+      <div class="field">
+        <button class="btn" id="submitBtn" type="submit">Sign in</button>
+      </div>
+
+      <div class="divider" aria-hidden>
+        <span></span>
+        <small>or continue with</small>
+        <span></span>
+      </div>
+
+      <div class="socials" role="group" aria-label="social sign in">
+        <button type="button" class="secondary">Google</button>
+        <button type="button" class="secondary">GitHub</button>
+      </div>
+
+      <p class="note">Don't have an account? <a href="#" style="color:var(--accent);text-decoration:none">Sign up</a></p>
+    </form>
+
+    <script>
+      // Basic client-side validation + small UX (no real auth)
+      const form = document.getElementById('loginForm');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const emailErr = document.getElementById('emailErr');
+      const passErr = document.getElementById('passErr');
+      const toggle = document.getElementById('togglePass');
+
+      toggle.addEventListener('click', () => {
+        const isHidden = password.type === 'password';
+        password.type = isHidden ? 'text' : 'password';
+        toggle.textContent = isHidden ? 'Hide' : 'Show';
+        toggle.setAttribute('aria-pressed', String(isHidden));
+      });
+
+      function showError(input, message){
+        input.classList.add('error');
+        if(input === email){
+          emailErr.style.display='block';
+          emailErr.textContent = message;
+        } else {
+          passErr.style.display='block';
+          passErr.textContent = message;
+        }
+      }
+      function clearError(input){
+        input.classList.remove('error');
+        if(input === email){emailErr.style.display='none';}
+        else {passErr.style.display='none';}
+      }
+
+      email.addEventListener('input', () => clearError(email));
+      password.addEventListener('input', () => clearError(password));
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let ok = true;
+
+        // email simple check
+        const emailVal = email.value.trim();
+        const passVal = password.value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailVal || !emailPattern.test(emailVal)){
+          showError(email, 'Please enter a valid email address.');
+          ok = false;
+        }
+        if(!passVal || passVal.length < 6){
+          showError(password, 'Password must be at least 6 characters.');
+          ok = false;
+        }
+
+        if(!ok) return;
+
+        // Simulate sign-in success
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+
+        // In a real page you'd send the credentials to the server here (fetch/XHR)
+        setTimeout(() => {
+          submitBtn.textContent = 'Signed in ✓';
+          submitBtn.style.opacity = 0.95;
+          // redirect or show success state
+          // location.href = '/dashboard';
+        }, 900);
+      });
+    </script>
+  </main>
+</body>
+</html>
